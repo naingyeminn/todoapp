@@ -1,4 +1,4 @@
-FROM docker.io/library/nginx:latest
+FROM registry.access.redhat.com/ubi8/nginx-118:latest
 
 LABEL maintainer="Naing Ye Minn <naingyeminn@gmail.com>"
 
