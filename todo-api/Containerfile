@@ -1,4 +1,4 @@
-FROM docker.io/library/golang:latest
+FROM docker.io/library/golang:latest AS builder
 
 LABEL maintainer="Naing Ye Minn <naingyeminn@gmail.com>"
 
@@ -7,3 +7,11 @@ COPY todo-api.go .
 RUN go mod init todoapp/todo-api && \
     go mod tidy && \
     go build
+
+
+FROM registry.access.redhat.com/ubi8-micro
+
+WORKDIR /app
+COPY --from=builder /go/src/todo-api /app
+
+CMD ["/app/todo-api"]
