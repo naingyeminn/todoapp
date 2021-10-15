@@ -14,7 +14,7 @@ import (
 )
 
 
-var db, _ = gorm.Open("mysql", "todoapi:pass-123@tcp(todo-db.kyl.lab:3306)/todolist?charset=utf8&parseTime=True&loc=Local")
+var db, _ = gorm.Open("mysql", "todoapi:pass-123@tcp(localhost:3306)/todolist?charset=utf8&parseTime=True&loc=Local")
 
 type TodoItemModel struct{
 	Id int `gorm:"primary_key"`
