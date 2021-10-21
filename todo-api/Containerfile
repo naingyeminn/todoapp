@@ -1,4 +1,4 @@
-FROM docker.io/library/golang:latest AS builder
+FROM quay.io/naingyeminn/golang:latest AS builder
 
 LABEL maintainer="Naing Ye Minn <naingyeminn@gmail.com>"
 
