@@ -2,4 +2,6 @@ FROM docker.io/library/nginx:latest
 
 LABEL maintainer="Naing Ye Minn <naingyeminn@gmail.com>"
 
-COPY . /usr/share/nginx/html
+COPY ./configre-api.sh /docker-entrypoint.d/
+COPY resources /usr/share/nginx/html/resources
+COPY ./index.html /usr/share/nginx/html/

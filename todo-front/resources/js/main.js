@@ -1,4 +1,4 @@
-var server = "http://localhost:8000/";
+var server = "http://TODO_API_HOST:TODO_API_PORT/";
 var todolist_server = server + "todo"
 
 function getCompletedTodos(){
