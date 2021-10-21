@@ -1,7 +1,11 @@
-FROM docker.io/library/nginx:latest
+FROM docker.io/library/python:alpine
 
 LABEL maintainer="Naing Ye Minn <naingyeminn@gmail.com>"
 
-COPY ./configre-api.sh /docker-entrypoint.d/
-COPY resources /usr/share/nginx/html/resources
-COPY ./index.html /usr/share/nginx/html/
+WORKDIR /web
+
+COPY run-http.sh /web
+COPY index.html /web/html/
+COPY resources /web/html/resources
+
+CMD ["/web/run-http.sh"]
