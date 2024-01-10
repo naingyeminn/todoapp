@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  run-http.sh: |
+    #!/bin/sh
+
+    #sed -i -e "s/TODO_API_HOST/${TODO_API_HOST}/" -e "s/TODO_API_PORT/${TODO_API_PORT}/" /web/html/resources/js/main.js
+    sed -i 's/^var server.*/var server = "https:\/\/todo.ginger275.messwithdns.com\/"/' /web/html/resources/js/main.js
+
+    python -m http.server -d /web/html 80
+kind: ConfigMap
+metadata:
+  name: {{ include "todo-app.fullname" . }}-front-config
+  labels:
+    app: todo-front
+    {{- include "todo-app.labels" . | nindent 4 }}

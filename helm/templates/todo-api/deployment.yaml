@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: todo-api
+    {{- include "todo-app.labels" . | nindent 4 }}
+  name: {{ include "todo-app.fullname" . }}-api
+spec:
+  replicas: {{ .Values.todo_api.replicaCount }}
+  selector:
+    matchLabels:
+      app: todo-api
+      {{- include "todo-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: todo-api
+        {{- include "todo-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - image: {{ .Values.todo_api.image.repository }}:{{ default "latest" .Values.todo_api.image.tag }}
+        name: todo-api
+        env:
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "todo-app.fullname" . }}-secrets
+              key: mysql_password
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "todo-app.fullname" . }}-secrets
+              key: mysql_user
+        - name: DB_NAME
+          value: {{ default "todo_db" .Values.db.name }}
+        - name: DB_HOST
+          value: {{ include "todo-app.fullname" . }}-db
+        - name: DB_PORT
+          value: {{ default "3306" .Values.db.port | quote }}

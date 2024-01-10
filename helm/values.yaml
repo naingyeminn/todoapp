@@ -1,0 +1,19 @@
+# Default values for todo-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+todo_front:
+  replicaCount: 2
+  image:
+    repository: quay.io/naingyeminn/todo-front
+    tag: ""
+todo_api:
+  replicaCount: 2
+  image:
+    repository: quay.io/naingyeminn/todo-api
+    tag: ""
+db:
+  username: ""
+  password: ""
+  root_password: ""

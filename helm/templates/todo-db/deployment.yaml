@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: todo-db
+    {{- include "todo-app.labels" . | nindent 4 }}
+  name: {{ include "todo-app.fullname" . }}-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-db
+      {{- include "todo-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: todo-db
+        {{- include "todo-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - image: mysql:8.0-debian
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "todo-app.fullname" . }}-secrets
+              key: root_password
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "todo-app.fullname" . }}-secrets
+              key: mysql_password
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "todo-app.fullname" . }}-secrets
+              key: mysql_user
+        - name: MYSQL_DATABASE
+          value: {{ default "todo_db" .Values.db.name }}
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: todo-db-vol
+      volumes:
+      - name: todo-db-vol
+        persistentVolumeClaim:
+          claimName: {{ include "todo-app.fullname" . }}-db

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: todo-front
+    {{- include "todo-app.labels" . | nindent 4 }}
+  name: {{ include "todo-app.fullname" . }}-front
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: todo-front
+    {{- include "todo-app.selectorLabels" . | nindent 4 }}
+  type: ClusterIP

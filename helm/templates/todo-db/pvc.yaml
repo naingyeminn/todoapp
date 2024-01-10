@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: todo-db
+    {{- include "todo-app.labels" . | nindent 4 }}
+  name: {{ include "todo-app.fullname" . }}-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  #storageClassName: standard
+  resources:
+    requests:
+      storage: {{ default "1Gi" .Values.db.storage }}

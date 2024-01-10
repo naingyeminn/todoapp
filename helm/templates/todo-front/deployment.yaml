@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: todo-front
+    {{- include "todo-app.labels" . | nindent 4 }}
+  name: {{ include "todo-app.fullname" . }}-front
+spec:
+  replicas: {{ .Values.todo_front.replicaCount }}
+  selector:
+    matchLabels:
+      app: todo-front
+      {{- include "todo-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: todo-front
+        {{- include "todo-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - image: {{ .Values.todo_front.image.repository }}:{{ default "latest" .Values.todo_front.image.tag }}
+        name: todo-front
+        volumeMounts:
+        - name: todo-front-config
+          mountPath: /web/run-http.sh
+          subPath: run-http.sh
+      volumes:
+      - name: todo-front-config
+        configMap:
+          name: {{ include "todo-app.fullname" . }}-front-config
+          defaultMode: 0755
+          items:
+          - key: run-http.sh
+            path: run-http.sh
