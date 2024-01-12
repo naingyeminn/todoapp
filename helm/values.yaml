@@ -2,6 +2,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+domain: todo.example.com
+protocol: https
+tls_secret: tls-cert
 
 todo_front:
   replicaCount: 2
@@ -17,3 +20,4 @@ db:
   username: ""
   password: ""
   root_password: ""
+  storageclass: standard

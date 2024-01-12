@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     app: todo-db
@@ -41,8 +41,17 @@ spec:
           value: {{ default "todo_db" .Values.db.name }}
         volumeMounts:
         - mountPath: /var/lib/mysql
-          name: todo-db-vol
-      volumes:
-      - name: todo-db-vol
-        persistentVolumeClaim:
-          claimName: {{ include "todo-app.fullname" . }}-db
+          name: db-data-vol
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        app: todo-db
+      name: db-data-vol
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      {{- if .Values.db.storageclass }}
+      storageClassName: standard
+      {{- end }}
+      resources:
+        requests:
+          storage: {{ default "500Mi" .Values.db.storage }}

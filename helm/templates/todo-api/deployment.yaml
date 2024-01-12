@@ -17,6 +17,10 @@ spec:
         app: todo-api
         {{- include "todo-app.selectorLabels" . | nindent 8 }}
     spec:
+      initContainers:
+      - name: init-db
+        image: busybox
+        command: ['sh', '-c', 'until nc -vz {{ include "todo-app.fullname" . }}-db:{{ default "3306" .Values.db.port }}; do echo waiting for db; sleep 2; done']
       containers:
       - image: {{ .Values.todo_api.image.repository }}:{{ default "latest" .Values.todo_api.image.tag }}
         name: todo-api

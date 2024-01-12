@@ -4,7 +4,7 @@ data:
     #!/bin/sh
 
     #sed -i -e "s/TODO_API_HOST/${TODO_API_HOST}/" -e "s/TODO_API_PORT/${TODO_API_PORT}/" /web/html/resources/js/main.js
-    sed -i 's/^var server.*/var server = "https:\/\/todo.ginger275.messwithdns.com\/"/' /web/html/resources/js/main.js
+    sed -i 's/^var server.*/var server = "{{ default "http" .Values.protocol }}:\/\/{{ default "todo.example.com" .Values.domain }}\/"/' /web/html/resources/js/main.js
 
     python -m http.server -d /web/html 80
 kind: ConfigMap

@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: todo-front
+    {{- include "todo-app.labels" . | nindent 4 }}
+  name: {{ include "todo-app.fullname" . }}-front
+spec:
+{{- if .Values.tls_secret }}
+  tls:
+    - hosts:
+      - {{ .Values.domain }}
+      secretName: {{ .Values.tls_secret }}
+{{- end }}
+  ingressClassName: nginx
+  rules:
+    - host: {{ .Values.domain }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ include "todo-app.fullname" . }}-front
+              port:
+                number: 80
+        - path: /todo
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ include "todo-app.fullname" . }}-api
+              port:
+                number: 8000
+        - path: /todo-completed
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ include "todo-app.fullname" . }}-api
+              port:
+                number: 8000
+        - path: /todo-incomplete
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ include "todo-app.fullname" . }}-api
+              port:
+                number: 8000
